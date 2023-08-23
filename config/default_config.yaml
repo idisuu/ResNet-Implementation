@@ -1,0 +1,26 @@
+model:
+  name: 18
+  num_classes: 10
+  use_residual: True
+    use_transformation_in_shortcut = "none"
+
+dataset:
+  train:
+    resize_size:
+      use: True
+      low: 32
+      high: 32
+    input_size: 32
+    use_pixel_centerization: True
+    use_standard_color_augmentation: True
+  test:
+    resize_size:
+      use: True
+      low: 32
+      high: 32
+    input_size: 32
+    use_pixel_centerization: True
+    use_standard_color_augmentation: True
+
+    
+        
