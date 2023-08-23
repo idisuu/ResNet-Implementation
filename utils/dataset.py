@@ -31,11 +31,12 @@ class ResNetDataset(Dataset):
                  use_standard_color_augmentation: bool=True):
         self.dataset = dataset
         self.resize_size = resize_size
+        self.use_horizontal_flip = use_horizontal_flip
         self.input_size= input_size
         self.use_pixel_centerization = use_pixel_centerization
         self.use_standard_color_augmentation = use_standard_color_augmentation
 
-        if self.resize_size[0] >= self.resize_size[1]:
+        if resize_size and (self.resize_size[0] >= self.resize_size[1]):
             raise Exception(f"잘못된 입력: {resize_size} :resize_size의 첫 항은 두번째 항보다 작아야 합니다")
 
         self.resize_method = torchvision.transforms.Resize
@@ -65,7 +66,7 @@ class ResNetDataset(Dataset):
         image = np.asarray(image) / 255
 
         if self.use_pixel_centerization:
-            image = image_array - self.mean_value_per_pixel
+            image = image - self.mean_value_per_pixel
 
         if self.use_standard_color_augmentation:
             image = self._standard_color_augmentation(image)

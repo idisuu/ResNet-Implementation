@@ -2,25 +2,41 @@ model:
   name: 18
   num_classes: 10
   use_residual: True
-    use_transformation_in_shortcut = "none"
+  use_transformation_in_shortcut: "none"
 
 dataset:
+  name: "cifar-10" # 현재는 "cifar-10"만 가능
+  path: "./data"
   train:
+    # 논문에서는 224 크기의 random crop을 위해 256에서 480 사이로 resize했으며, 이는 약 1.14배에서 2.14배 사이의 크기임
+    # 해당 비례를 따라서 32의 약 1.14배인 36과 68 사이의 값으로 resize 실행
+    # 단 resize할 경우 성능이 감소하여, 실험에는 resize를 사용하지 않음
     resize_size:
-      use: True
-      low: 32
-      high: 32
+      use: False
+      low: 36
+      high: 68
     input_size: 32
+    use_horizontal_flip: True
     use_pixel_centerization: True
     use_standard_color_augmentation: True
   test:
     resize_size:
-      use: True
+      use: False
       low: 32
       high: 32
     input_size: 32
-    use_pixel_centerization: True
-    use_standard_color_augmentation: True
+    use_horizontal_flip: False
+    use_pixel_centerization: False
+    use_standard_color_augmentation: False
 
+trainer:
+  epochs: 10
+  batch_size: 256
+  optimizer: "Adam" # 현재는 "SGD"와 "Adam"만 사용가능 - ResNet 논문에서는 SGD를 사용했으나, 실험결과 Adam이 더 안정적으로 수렴하여 실험에는 Adam 사용
+
+experiment:
+  save_result: True
+  save_folder: "./result/default"
+  save_name: "default"
     
         
