@@ -18,15 +18,18 @@ logger.addHandler(console_handler)
 
 ##### Load config #####
 parser = argparse.ArgumentParser(description="Parse config file location")
-parser.add_argument("--config", type=str, required=True, help="Path to config file")
+parser.add_argument("--config", type=str, required=False, help="Path to config file")
 
 args = parser.parse_args()
 config_file_path = args.config
 config = OmegaConf.load(config_file_path)
 
+logger.info(f"{config}")
+
 ##### load dataset #####
 dataset_loader = DatasetLoader()
 
+print(config["dataset"]["name"])
 dataset_name = config["dataset"]["name"]
 dataset_path = config["dataset"]["path"]
 
@@ -97,7 +100,8 @@ trainer = ResNetTrainer(
                 train_dataset=train_dataset,
                 test_dataset=test_dataset,
                 logger=logger,
-                optimizer=trainer_config["optimizer"]
+                learning_rate = trainer_config["learning_rate"],
+                optimizer=trainer_config["optimizer"],
             )
 
 ##### train model #####
@@ -113,12 +117,12 @@ if experiment_config["save_result"]:
         logging.info(f"{save_folder}가 결과의 저장을 위해 생성되었습니다.")
         os.mkdir(save_folder)
     # config를 yaml파일로 저장
-    config_save_path = save_folder + "/" + save_name + ".yaml"
+    config_save_path = save_folder + "/" + str(save_name) + ".yaml"
     OmegaConf.save(config, config_save_path)
     logger.info(f"{config_save_path}에 config가 저장되었습니다.")
 
     # 실험결과를 json파일로 저장
-    json_save_path =  save_folder + "/" + save_name + ".json"    
+    json_save_path =  save_folder + "/" + str(save_name).replace(".", "_") + ".json"    
     with open(json_save_path, "w") as f:
         json.dump(result, f)
     logger.info(f"{json_save_path}에 학습결과가 저장되었습니다.")

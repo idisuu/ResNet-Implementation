@@ -8,6 +8,7 @@ from torch.optim import SGD, Adam
 from torch.optim import lr_scheduler
 
 from tqdm import tqdm
+import torch.nn.init as init
 
 class ResNetTrainer:
     def __init__(
@@ -18,25 +19,28 @@ class ResNetTrainer:
         train_dataset,
         test_dataset,
         logger,
-        optimizer: "str",        
+        learning_rate: float,
+        optimizer: "str",
                  ):
         self.model = model
+            
         self.epochs = epochs
         self.batch_size = batch_size
         self.train_dataset = train_dataset
         self.test_dataset = test_dataset
-        self.logger = logger
+        self.logger = logger        
+        self.learning_rate = learning_rate
        
         self.train_dataloader = DataLoader(self.train_dataset, batch_size=self.batch_size)
         self.test_dataloader = DataLoader(self.test_dataset, batch_size=self.batch_size)
 
         if optimizer == "SGD":
-            self.optimizer = SGD(self.model.parameters(), lr=0.1, momentum=0.9, weight_decay=0.0001)
+            self.optimizer = SGD(self.model.parameters(), lr=self.learning_rate, momentum=0.9, weight_decay=0.0001)
         elif optimizer == "Adam":
-            self.optimizer = Adam(self.model.parameters())
+            self.optimizer = Adam(self.model.parameters(), lr=self.learning_rate)
 
         self.loss_fct = nn.CrossEntropyLoss()
-        self.scheduler = lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=self.epochs)
+        self.scheduler = lr_scheduler.CosineAnnealingLR(self.optimizer, T_max=self.epochs)        
 
     def train(self):
         train_loss_by_epoch = []

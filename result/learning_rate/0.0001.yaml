@@ -1,0 +1,35 @@
+model:
+  name: '50'
+  num_classes: 10
+  use_residual: true
+  use_transformation_in_shortcut: none
+dataset:
+  name: cifar-10
+  path: ./data
+  train:
+    resize_size:
+      use: false
+      low: 36
+      high: 68
+    input_size: 32
+    use_horizontal_flip: true
+    use_pixel_centerization: true
+    use_standard_color_augmentation: true
+  test:
+    resize_size:
+      use: false
+      low: 32
+      high: 32
+    input_size: 32
+    use_horizontal_flip: false
+    use_pixel_centerization: false
+    use_standard_color_augmentation: false
+trainer:
+  epochs: 10
+  batch_size: 256
+  optimizer: Adam
+  learning_rate: 0.0001
+experiment:
+  save_result: true
+  save_folder: ./result/learning_rate
+  save_name: 0.0001

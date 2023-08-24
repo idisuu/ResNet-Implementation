@@ -33,6 +33,7 @@ trainer:
   epochs: 10
   batch_size: 256
   optimizer: "Adam" # 현재는 "SGD"와 "Adam"만 사용가능 - ResNet 논문에서는 SGD를 사용했으나, 실험결과 Adam이 더 안정적으로 수렴하여 실험에는 Adam 사용
+  learning_rate: 1e-4
 
 experiment:
   save_result: True
