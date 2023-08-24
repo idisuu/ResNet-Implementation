@@ -4,6 +4,7 @@ config 파일을 yaml 형식으로 만드신 후에 main.py를 실행할 때 yam
 터미널 입력형식은 아래와 같습니다.
 ```python
 python main.py --config [config 파일 경로]
+```
 <br>
 <br>
 ### 코드리뷰
